@@ -12,7 +12,7 @@ import { useSendMessage } from '@/condition/useSendMessage';
 import { useTyping } from '@/condition/useTyping';
 import { useGroupedMessages } from '@/condition/useGroupedMessages';
 import { useClipboardImage } from '@/condition/useClipboardImage';
-import { useOpenImageDialog } from '@/condition/useOpenImageDialog';
+// import { useOpenImageDialog } from '@/condition/useOpenImageDialog';
 
 // import BanStatus from '@/components/BanStatus.vue';
 // import ImageDialog from '@/components/ImageDialog.vue';
@@ -100,12 +100,12 @@ const {
     clearImage,
 } = useClipboardImage();
 
-const {
-    dialogImageUrl,
-    openImageDialog,
-    closeImageDialog,
-    handleMessageContentClick,
-} = useOpenImageDialog();
+// const {
+//     dialogImageUrl,
+//     openImageDialog,
+//     closeImageDialog,
+//     handleMessageContentClick,
+// } = useOpenImageDialog();
 
 interface ChatMessage {
     id: string;
@@ -162,7 +162,7 @@ watch(imageUrl, (newImageUrl) => {
 onMounted(() => {
     chatContainerRef.value?.addEventListener('scroll', handleScroll);
 
-    chatContainerRef.value?.addEventListener('click', handleMessageContentClick);
+    // chatContainerRef.value?.addEventListener('click', handleMessageContentClick);
 
     checkUserBanStatus();
 
@@ -330,7 +330,7 @@ onBeforeUnmount(() => {
 
                     <div v-else class="flex w-full flex-col">
                         <div v-if="imageUrl" class="mb-2 p-2 border border-gray-300 rounded-md bg-gray-100 flex items-center justify-between">
-                            <img :src="imageUrl" @click="openImageDialog(imageUrl)" alt="Pasted Image" class="max-h-20 max-w-[100px] object-contain cursor-pointer"/>
+                            <!-- <img :src="imageUrl" @click="openImageDialog(imageUrl)" alt="Pasted Image" class="max-h-20 max-w-[100px] object-contain cursor-pointer"/> -->
                             <p class="text-xs text-gray-600 mx-2 break-all">{{ shortenedImageUrl }}</p>
                             <button @click="clearImage" class="ml-auto text-red-500 hover:text-red-700 font-bold">X</button>
                         </div>
@@ -366,6 +366,6 @@ onBeforeUnmount(() => {
             </div>
         </div>
 
-        <ImageDialog :image-url="dialogImageUrl" @close="closeImageDialog" />
+        <!-- <ImageDialog :image-url="dialogImageUrl" @close="closeImageDialog" /> -->
     </div>
 </template>

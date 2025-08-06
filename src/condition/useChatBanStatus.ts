@@ -4,7 +4,7 @@ import { ref, computed, watchEffect, type Ref } from 'vue';
 import { doc, getDoc, updateDoc, collection, serverTimestamp, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/firebase';
 
-import { useTyping } from '@/composables/useTyping'; // Import useTyping
+import { useTyping } from '@/condition/useTyping'; // Import useTyping
 
 export function useChatBanStatus() {
   const isCurrentUserBanned = ref(false);

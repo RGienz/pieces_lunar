@@ -168,24 +168,24 @@ onUnmounted(() => {
           >
             Logout
           </button>
-          <span class="text-slate-600 text-sm">{{ loggedInUser.uid }}</span>
+          <!-- <span class="text-slate-600 text-sm">{{ loggedInUser.uid }}</span> -->
           <div class="flex items-center">
-            <p class="text-[13px] lg:mb-0 mr-1"><strong class="text-slate-700">Email Verified:</strong></p>
-            <div v-if="loggedInUser.emailVerified === true">
+            <!-- <p class="text-[13px] lg:mb-0 mr-1"><strong class="text-slate-700">Email Verified:</strong></p> -->
+            <!-- <div v-if="loggedInUser.emailVerified === true"> -->
               <!-- <BadgeCheck class="w-5 h-5 mr-1" fill="#3897f1" color="#ffffff" :stroke-width="2" /> -->
-            </div>
-            <div v-else>
-              <div class="flex">
+            <!-- </div> -->
+            <!-- <div v-else> -->
+              <!-- <div class="flex"> -->
                 <!-- <TriangleAlert class="w-5 h-5 mr-1 text-yellow-500"/> -->
-                 <button
+                 <!-- <button
                   @click.prevent="handleSendVerificationEmail"
                   :disabled="isSendingVerification"
                   class="text-[15px] text-blue-500 hover:underline disabled:text-gray-400 disabled:cursor-not-allowed"
                 >
                   {{ isSendingVerification ? 'Sending...' : 'verify' }}
                 </button>
-              </div>
-            </div>
+              </div> -->
+            <!-- </div> -->
           </div>
           <!-- <OnlineUsers class="mt-5" /> -->
         </div>

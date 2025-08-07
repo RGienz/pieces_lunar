@@ -32,53 +32,53 @@ export function useChatBanStatus() {
     const disabledUserDocRef = doc(db, 'disabled_users', currentUserId);
 
     try {
-      const docSnap = await getDoc(disabledUserDocRef);
+      // const docSnap = await getDoc(disabledUserDocRef);
 
-      if (docSnap.exists()) {
-        const banData = docSnap.data();
-        const isDisabled = banData.is_disabled;
-        const banStartTime = banData.ban_start_time?.toDate(); // Convert Firestore Timestamp to Date
-        const banDurationSeconds = banData.ban_duration_seconds;
-        const reason = banData.ban_reason || 'No specific reason provided.';
+      // if (docSnap.exists()) {
+      //   const banData = docSnap.data();
+      //   const isDisabled = banData.is_disabled;
+      //   const banStartTime = banData.ban_start_time?.toDate(); // Convert Firestore Timestamp to Date
+      //   const banDurationSeconds = banData.ban_duration_seconds;
+      //   const reason = banData.ban_reason || 'No specific reason provided.';
 
-        if (isDisabled && banStartTime && typeof banDurationSeconds === 'number') {
-          const calculatedBanEndTime = new Date(banStartTime.getTime() + banDurationSeconds * 1000); // Calculate end time in milliseconds
+      //   if (isDisabled && banStartTime && typeof banDurationSeconds === 'number') {
+      //     const calculatedBanEndTime = new Date(banStartTime.getTime() + banDurationSeconds * 1000); // Calculate end time in milliseconds
 
-          console.log(`DEBUG (useChatBanStatus): Ban Start Time: ${banStartTime.toLocaleString()}`);
-          console.log(`DEBUG (useChatBanStatus): Ban Duration: ${banDurationSeconds} seconds`);
-          console.log(`DEBUG (useChatBanStatus): Calculated Ban End Time: ${calculatedBanEndTime.toLocaleString()}`);
-          console.log(`DEBUG (useChatBanStatus): Current Time: ${new Date().toLocaleString()}`);
+      //     console.log(`DEBUG (useChatBanStatus): Ban Start Time: ${banStartTime.toLocaleString()}`);
+      //     console.log(`DEBUG (useChatBanStatus): Ban Duration: ${banDurationSeconds} seconds`);
+      //     console.log(`DEBUG (useChatBanStatus): Calculated Ban End Time: ${calculatedBanEndTime.toLocaleString()}`);
+      //     console.log(`DEBUG (useChatBanStatus): Current Time: ${new Date().toLocaleString()}`);
 
-          if (calculatedBanEndTime > new Date()) {
-            // User is currently banned
-            isCurrentUserBanned.value = true;
-            banReason.value = reason;
-            banEndTime.value = calculatedBanEndTime;
-            console.warn(`User ${currentUserId} is currently banned until ${calculatedBanEndTime.toLocaleString()} for reason: ${reason}`);
+      //     if (calculatedBanEndTime > new Date()) {
+      //       // User is currently banned
+      //       isCurrentUserBanned.value = true;
+      //       banReason.value = reason;
+      //       banEndTime.value = calculatedBanEndTime;
+      //       console.warn(`User ${currentUserId} is currently banned until ${calculatedBanEndTime.toLocaleString()} for reason: ${reason}`);
             
-            // NEW: If user becomes banned, stop their typing status
-            await stopTyping(); // Stop typing when banned
+      //       // NEW: If user becomes banned, stop their typing status
+      //       await stopTyping(); // Stop typing when banned
             
-          } else {
-            // Ban has expired, clean up the ban record in Firestore
-            isCurrentUserBanned.value = false;
-            banReason.value = '';
-            banEndTime.value = null;
-            console.log(`User ${currentUserId} ban has expired. Removing ban record.`);
-            await updateDoc(disabledUserDocRef, { is_disabled: false });
-          }
-        } else {
-          // Document exists but ban data is invalid or user is not marked as disabled
-          isCurrentUserBanned.value = false;
-          banReason.value = '';
-          banEndTime.value = null;
-        }
-      } else {
-        // Document does not exist, so user is not banned
-        isCurrentUserBanned.value = false;
-        banReason.value = '';
-        banEndTime.value = null;
-      }
+      //     } else {
+      //       // Ban has expired, clean up the ban record in Firestore
+      //       isCurrentUserBanned.value = false;
+      //       banReason.value = '';
+      //       banEndTime.value = null;
+      //       console.log(`User ${currentUserId} ban has expired. Removing ban record.`);
+      //       await updateDoc(disabledUserDocRef, { is_disabled: false });
+      //     }
+      //   } else {
+      //     // Document exists but ban data is invalid or user is not marked as disabled
+      //     isCurrentUserBanned.value = false;
+      //     banReason.value = '';
+      //     banEndTime.value = null;
+      //   }
+      // } else {
+      //   // Document does not exist, so user is not banned
+      //   isCurrentUserBanned.value = false;
+      //   banReason.value = '';
+      //   banEndTime.value = null;
+      // }
     } catch (error) {
       console.error('Error fetching user ban status:', error);
       isCurrentUserBanned.value = false; // Assume not banned on error to avoid blocking

@@ -166,51 +166,51 @@ onMounted(() => {
 
     checkUserBanStatus();
 
-    if (db && loggedInUser.value) {
-        const messagesRef = collection(db, 'messages_aports');
-        const q = query(messagesRef, orderBy('timestamp', 'asc'));
+    // if (db && loggedInUser.value) {
+    //     const messagesRef = collection(db, 'messages_aports');
+    //     const q = query(messagesRef, orderBy('timestamp', 'asc'));
 
-        onSnapshot(q, async (snapshot) => {
-        allMessages.value = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-        })) as ChatMessage[];
+    //     onSnapshot(q, async (snapshot) => {
+    //     allMessages.value = snapshot.docs.map((doc) => ({
+    //         id: doc.id,
+    //         ...doc.data(),
+    //     })) as ChatMessage[];
 
-        updateVisibleMessages();
+    //     updateVisibleMessages();
 
-        const visibleMessages = messages.value;
-        visibleMessages.forEach((msg) => fetchReactions(msg.id));
+    //     const visibleMessages = messages.value;
+    //     visibleMessages.forEach((msg) => fetchReactions(msg.id));
 
-        await Promise.all(
-            visibleMessages.map((msg) => new Promise<void>((resolve) => {
-            const reactionsRef = collection(db, 'messages_aports', msg.id, 'reactions');
-            const reactionQuery = query(reactionsRef, orderBy('timestamp', 'asc'));
+    //     await Promise.all(
+    //         visibleMessages.map((msg) => new Promise<void>((resolve) => {
+    //         const reactionsRef = collection(db, 'messages_aports', msg.id, 'reactions');
+    //         const reactionQuery = query(reactionsRef, orderBy('timestamp', 'asc'));
 
-            const unsubscribe = onSnapshot(reactionQuery, (reactionSnap) => {
-                const reactionsData = reactionSnap.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                    }));
-                    reactions.value[msg.id] = reactionsData;
+    //         const unsubscribe = onSnapshot(reactionQuery, (reactionSnap) => {
+    //             const reactionsData = reactionSnap.docs.map((doc) => ({
+    //                 id: doc.id,
+    //                 ...doc.data(),
+    //                 }));
+    //                 reactions.value[msg.id] = reactionsData;
 
-                    unsubscribe();
-                    resolve();
-                });
-            }))
-        );
+    //                 unsubscribe();
+    //                 resolve();
+    //             });
+    //         }))
+    //     );
 
-        nextTick(() => {
-            const lastMessage = visibleMessages[visibleMessages.length - 1];
+    //     nextTick(() => {
+    //         const lastMessage = visibleMessages[visibleMessages.length - 1];
 
-            if (lastMessage?.userId !== loggedInUser.value?.uid) {
-                handleNewMessage();
-                } else {
-                scrollToBottom();
-                }
-            });
-        });
+    //         if (lastMessage?.userId !== loggedInUser.value?.uid) {
+    //             handleNewMessage();
+    //             } else {
+    //             scrollToBottom();
+    //             }
+    //         });
+    //     });
 
-    }
+    // }
 });
 
 onBeforeUnmount(() => {
@@ -229,7 +229,7 @@ onBeforeUnmount(() => {
                 <!-- <img draggable="false" class="w-6" src="/nexus.png" alt=""> -->
                 </div>
                 &nbsp;
-                <p class="text-[12px] text-slate-400">— v0.5.0.1</p>
+                <!-- <p class="text-[12px] text-slate-400">— v0.5.0.1</p> -->
             </div>
         </div>
 

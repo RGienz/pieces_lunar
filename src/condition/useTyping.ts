@@ -28,7 +28,7 @@ export function useTyping() {
     }; 
     // ✅ Writing — sets 'isTyping: false' for the logged-in user's document (when they stop typing)
 
-	let unsubscribeTypingSnapshot: () => void;
+	// let unsubscribeTypingSnapshot: () => void;
 
 	onMounted(() => {
 		if (db && loggedInUser.value) {
@@ -36,18 +36,18 @@ export function useTyping() {
             const typingRef = collection(db, 'typing'); 
             // ✅ Reference to the 'typing' collection in Firestore (stores typing status per user)
 
-            unsubscribeTypingSnapshot = onSnapshot(typingRef, (snapshot) => {
-                isSomeoneTyping.value = snapshot.docs.some(
-                    (doc) => doc.id !== loggedInUser.value?.uid && doc.data()?.isTyping // checks if 'isTyping' is true or false
-                );
-            }); 
+            // unsubscribeTypingSnapshot = onSnapshot(typingRef, (snapshot) => {
+            //     isSomeoneTyping.value = snapshot.docs.some(
+            //         (doc) => doc.id !== loggedInUser.value?.uid && doc.data()?.isTyping // checks if 'isTyping' is true or false
+            //     );
+            // }); 
             // ✅ Listens for changes in typing status and sets `isSomeoneTyping` to true
             // if **any other user** (not the current one) has `isTyping: true`
         }
 	});
 
 	onBeforeUnmount(() => {
-		if (unsubscribeTypingSnapshot) unsubscribeTypingSnapshot();
+		// if (unsubscribeTypingSnapshot) unsubscribeTypingSnapshot();
 		stopTyping();
 	});
 

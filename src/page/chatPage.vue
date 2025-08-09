@@ -123,23 +123,56 @@ const handlePaste = async (event: ClipboardEvent) => {
     }
 };
 
-const onlineOfflineList = [
+const onlineOfflineList = ref([
   { name: 'Alice', avatar: 'https://i.pravatar.cc/40?img=1', online: true },
   { name: 'Bob', avatar: 'https://i.pravatar.cc/40?img=2', online: true },
   { name: 'Charlie', avatar: 'https://i.pravatar.cc/40?img=3', online: false }
-]
+])
 
-const friendsList = [
+const friendsList = ref([
+  { name: 'Jane Doe', avatar: 'https://i.pravatar.cc/40?img=4' },
+  { name: 'Mike Ross', avatar: 'https://i.pravatar.cc/40?img=5' }
+])
+
+const groupList = ref([
+  { name: 'Gaming Squad', avatar: 'https://i.pravatar.cc/40?img=8' }
+])
+
+const allUsers = ref([
+  { name: 'Alice', avatar: 'https://i.pravatar.cc/40?img=1' },
+  { name: 'Bob', avatar: 'https://i.pravatar.cc/40?img=2' },
+  { name: 'Charlie', avatar: 'https://i.pravatar.cc/40?img=3' },
   { name: 'Jane Doe', avatar: 'https://i.pravatar.cc/40?img=4' },
   { name: 'Mike Ross', avatar: 'https://i.pravatar.cc/40?img=5' },
   { name: 'Sarah Lee', avatar: 'https://i.pravatar.cc/40?img=6' }
-]
+])
 
-const groupList = [
-  { name: 'Work Buddies', avatar: 'https://i.pravatar.cc/40?img=7' },
-  { name: 'Gaming Squad', avatar: 'https://i.pravatar.cc/40?img=8' },
-  { name: 'Study Group', avatar: 'https://i.pravatar.cc/40?img=9' }
-]
+const showAddFriendDialog = ref(false)
+const showAddGroupDialog = ref(false)
+const newGroupName = ref("")
+const selectedGroupFriends = ref([])
+
+const availableUsers = computed(() => {
+  return allUsers.value.filter(
+    user => !friendsList.value.some(f => f.name === user.name)
+  )
+})
+
+function addFriend(user) {
+  friendsList.value.push(user)
+  showAddFriendDialog.value = false
+}
+
+function createGroup() {
+  if (!newGroupName.value.trim() || selectedGroupFriends.value.length === 0) return
+  groupList.value.push({
+    name: newGroupName.value,
+    avatar: 'https://i.pravatar.cc/40?u=' + newGroupName.value
+  })
+  newGroupName.value = ""
+  selectedGroupFriends.value = []
+  showAddGroupDialog.value = false
+}
 
 // Create a wrapper function for sending messages
 const sendChatMessage = async () => {
@@ -180,7 +213,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="h-screen flex bg-gray-100 p-4">
     <!-- LEFT SIDEBAR -->
-    <div class="w-60 flex flex-col border border-gray-300 rounded-lg overflow-hidden bg-white shadow">
+    <div class="w-64 flex flex-col border border-gray-300 rounded-lg overflow-hidden bg-white shadow">
     <!-- ONLINE/OFFLINE -->
     <div>
       <div class="bg-blue-500 text-white px-3 py-2 text-sm font-semibold">Online/Offline</div>
@@ -196,7 +229,12 @@ onBeforeUnmount(() => {
 
     <!-- FRIENDS -->
     <div>
-      <div class="bg-green-500 text-white px-3 py-2 text-sm font-semibold">Friends</div>
+      <div class="bg-green-500 text-white px-3 py-2 text-sm font-semibold flex justify-between items-center">
+        Friends
+        <button @click="showAddFriendDialog = true" class="bg-white text-green-500 px-2 py-1 text-xs rounded hover:bg-gray-100">
+          + Add
+        </button>
+      </div>
       <ul class="divide-y divide-gray-200">
         <li v-for="friend in friendsList" :key="friend.name"
             class="flex items-center gap-2 p-2 hover:bg-gray-50 cursor-pointer">
@@ -208,7 +246,12 @@ onBeforeUnmount(() => {
 
     <!-- GROUP -->
     <div class="flex-1">
-      <div class="bg-purple-500 text-white px-3 py-2 text-sm font-semibold">Group</div>
+      <div class="bg-purple-500 text-white px-3 py-2 text-sm font-semibold flex justify-between items-center">
+        Group
+        <button @click="showAddGroupDialog = true" class="bg-white text-purple-500 px-2 py-1 text-xs rounded hover:bg-gray-100">
+          + Create
+        </button>
+      </div>
       <ul class="divide-y divide-gray-200">
         <li v-for="group in groupList" :key="group.name"
             class="flex items-center gap-2 p-2 hover:bg-gray-50 cursor-pointer">
@@ -216,6 +259,45 @@ onBeforeUnmount(() => {
           <span class="flex-1 text-sm">{{ group.name }}</span>
         </li>
       </ul>
+    </div>
+
+    <!-- ADD FRIEND DIALOG -->
+    <div v-if="showAddFriendDialog" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+      <div class="bg-white p-4 rounded-lg shadow w-72">
+        <h2 class="text-lg font-bold mb-3">Add Friend</h2>
+        <ul>
+          <li v-for="user in availableUsers" :key="user.name"
+              class="flex items-center gap-2 p-2 hover:bg-gray-50 cursor-pointer"
+              @click="addFriend(user)">
+            <img :src="user.avatar" alt="" class="w-8 h-8 rounded-full object-cover border" />
+            <span>{{ user.name }}</span>
+          </li>
+        </ul>
+        <button @click="showAddFriendDialog = false" class="mt-3 bg-gray-300 px-3 py-1 rounded">Close</button>
+      </div>
+    </div>
+
+    <!-- CREATE GROUP DIALOG -->
+    <div v-if="showAddGroupDialog" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+      <div class="bg-white p-4 rounded-lg shadow w-80">
+        <h2 class="text-lg font-bold mb-3">Create Group</h2>
+        <input v-model="newGroupName" type="text" placeholder="Group Name"
+               class="w-full border p-2 mb-3 rounded" />
+
+        <h3 class="font-semibold mb-2">Select Friends</h3>
+        <ul>
+          <li v-for="friend in friendsList" :key="friend.name" class="flex items-center gap-2 p-1">
+            <input type="checkbox" v-model="selectedGroupFriends" :value="friend" />
+            <img :src="friend.avatar" alt="" class="w-8 h-8 rounded-full object-cover border" />
+            <span>{{ friend.name }}</span>
+          </li>
+        </ul>
+
+        <div class="flex justify-end gap-2 mt-3">
+          <button @click="showAddGroupDialog = false" class="bg-gray-300 px-3 py-1 rounded">Cancel</button>
+          <button @click="createGroup" class="bg-purple-500 text-white px-3 py-1 rounded">Save</button>
+        </div>
+      </div>
     </div>
   </div>
 

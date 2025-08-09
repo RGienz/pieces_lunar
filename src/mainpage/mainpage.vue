@@ -81,7 +81,6 @@ const {
     isCurrentUserBanned,
     banReason,
     banEndTime,
-    checkUserBanStatus
 } = useSendMessage(newMessage);
 
 const {
@@ -164,53 +163,7 @@ onMounted(() => {
 
     // chatContainerRef.value?.addEventListener('click', handleMessageContentClick);
 
-    checkUserBanStatus();
 
-    // if (db && loggedInUser.value) {
-    //     const messagesRef = collection(db, 'messages_aports');
-    //     const q = query(messagesRef, orderBy('timestamp', 'asc'));
-
-    //     onSnapshot(q, async (snapshot) => {
-    //     allMessages.value = snapshot.docs.map((doc) => ({
-    //         id: doc.id,
-    //         ...doc.data(),
-    //     })) as ChatMessage[];
-
-    //     updateVisibleMessages();
-
-    //     const visibleMessages = messages.value;
-    //     visibleMessages.forEach((msg) => fetchReactions(msg.id));
-
-    //     await Promise.all(
-    //         visibleMessages.map((msg) => new Promise<void>((resolve) => {
-    //         const reactionsRef = collection(db, 'messages_aports', msg.id, 'reactions');
-    //         const reactionQuery = query(reactionsRef, orderBy('timestamp', 'asc'));
-
-    //         const unsubscribe = onSnapshot(reactionQuery, (reactionSnap) => {
-    //             const reactionsData = reactionSnap.docs.map((doc) => ({
-    //                 id: doc.id,
-    //                 ...doc.data(),
-    //                 }));
-    //                 reactions.value[msg.id] = reactionsData;
-
-    //                 unsubscribe();
-    //                 resolve();
-    //             });
-    //         }))
-    //     );
-
-    //     nextTick(() => {
-    //         const lastMessage = visibleMessages[visibleMessages.length - 1];
-
-    //         if (lastMessage?.userId !== loggedInUser.value?.uid) {
-    //             handleNewMessage();
-    //             } else {
-    //             scrollToBottom();
-    //             }
-    //         });
-    //     });
-
-    // }
 });
 
 onBeforeUnmount(() => {
@@ -324,7 +277,6 @@ onBeforeUnmount(() => {
                         :is-banned="isCurrentUserBanned"
                         :reason="banReason"
                         :ban-ends-at="banEndTime"
-                        :on-ban-expired="checkUserBanStatus"
                         />
                     </div>
 

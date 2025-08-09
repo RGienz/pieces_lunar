@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import Chat from './mainpage/mainpage.vue';
+// import Chat from './mainpage/mainpage.vue';
+import Chat2 from './page/chatPage.vue';
 // import OnlineUsers from './components/OnlineUsers.vue';
 import { ref, onMounted, onUnmounted, watch } from 'vue'; // Import watch and onUnmounted
 import { logoutUser, sendVerificationEmail } from './condition/auth';
@@ -160,38 +161,16 @@ onUnmounted(() => {
     <div v-if="loggedInUser">
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 bg-slate-50">
 
-        <div class="col-span-1 mx-5 my-5">
-          <p class="text-lg">Hello, <strong><i>{{ loggedInUser.displayName }}</i> !</strong> </p>
-          <button
+         <button
             @click="handleLogout"
             class="border border-slate-300 rounded-md py-1 px-2 cursor-pointer hover:bg-red-400 lg:hidden"
           >
             Logout
           </button>
-          <!-- <span class="text-slate-600 text-sm">{{ loggedInUser.uid }}</span> -->
-          <div class="flex items-center">
-            <!-- <p class="text-[13px] lg:mb-0 mr-1"><strong class="text-slate-700">Email Verified:</strong></p> -->
-            <!-- <div v-if="loggedInUser.emailVerified === true"> -->
-              <!-- <BadgeCheck class="w-5 h-5 mr-1" fill="#3897f1" color="#ffffff" :stroke-width="2" /> -->
-            <!-- </div> -->
-            <!-- <div v-else> -->
-              <!-- <div class="flex"> -->
-                <!-- <TriangleAlert class="w-5 h-5 mr-1 text-yellow-500"/> -->
-                 <!-- <button
-                  @click.prevent="handleSendVerificationEmail"
-                  :disabled="isSendingVerification"
-                  class="text-[15px] text-blue-500 hover:underline disabled:text-gray-400 disabled:cursor-not-allowed"
-                >
-                  {{ isSendingVerification ? 'Sending...' : 'verify' }}
-                </button>
-              </div> -->
-            <!-- </div> -->
-          </div>
-          <!-- <OnlineUsers class="mt-5" /> -->
-        </div>
 
         <div class="col-span-1 lg:col-span-2">
           <!-- <Chat :loggedInUser="loggedInUser" /> -->
+          <Chat2 :loggedInUser="loggedInUser" />
         </div>
 
         <div class="col-span-1 hidden lg:block mr-5 mt-5">

@@ -161,7 +161,7 @@ onUnmounted(() => {
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 bg-slate-50">
 
         <div class="col-span-1 mx-5 my-5">
-          <p class="text-lg">Hello, <strong>{{ loggedInUser.displayName }}!</strong> </p>
+          <p class="text-lg">Hello, <strong><i>{{ loggedInUser.displayName }}</i> !</strong> </p>
           <button
             @click="handleLogout"
             class="border border-slate-300 rounded-md py-1 px-2 cursor-pointer hover:bg-red-400 lg:hidden"
@@ -191,7 +191,7 @@ onUnmounted(() => {
         </div>
 
         <div class="col-span-1 lg:col-span-2">
-          <Chat :loggedInUser="loggedInUser" />
+          <!-- <Chat :loggedInUser="loggedInUser" /> -->
         </div>
 
         <div class="col-span-1 hidden lg:block mr-5 mt-5">
